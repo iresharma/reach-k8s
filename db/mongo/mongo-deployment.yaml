@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: postgres
+          image: 'mongo:8.0.1-noble'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: username
+                  name: mongo-config
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: password
+                  name: mongo-config
+          volumeMounts:
+            - mountPath: /var/lib/mongo/data
+              name: mongodata
+      volumes:
+        - name: mongodata
+          persistentVolumeClaim:
+            claimName: mongo-volume-claim
