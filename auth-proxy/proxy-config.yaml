@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-app-config
+data:
+  psql: "postgresql://iresharma@postgres/reach-systems"
+  redis: "redis:6379"
+  kanban_server: "kanban-service:4040"
+  page_server: "localhost:4001"
+  resend_api: "re_UEoVRazF_ADwXUvMXUoMcSSj8Uua38Fcs"
+  app_url: "http://localhost:3000"
+  base_url: "http://localhost:8080"

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kanban-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kanban-service
+  template:
+    metadata:
+      labels:
+        app: kanban-service
+    spec:
+      containers:
+      - name: kanban-service
+        image: reach-systems/kanban-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: kanban-service-config
+        env:
+        - name: POSTGRES
+          valueFrom:
+            configMapKeyRef:
+              name: kanban-service-config
+              key: psql

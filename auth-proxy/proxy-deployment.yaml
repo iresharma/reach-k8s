@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: go-app
+  template:
+    metadata:
+      labels:
+        app: go-app
+    spec:
+      containers:
+      - name: go-app
+        image: reach-systems/auth-proxy:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: go-app-config
+        env:
+        - name: POSTGRES
+          valueFrom:
+            configMapKeyRef:
+              name: go-app-config
+              key: psql
+        - name: REDIS
+          valueFrom:
+            configMapKeyRef:
+              name: go-app-config
+              key: redis
+        - name: KANBAN_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: go-app-config
+              key: kanban_server
+        - name: PAGE_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: go-app-config
+              key: page_server
+        - name: RESEND_API
+          valueFrom:
+            configMapKeyRef:
+              name: go-app-config
+              key: resend_api
+        - name: APP_URL
+          valueFrom:
+            configMapKeyRef:
+              name: go-app-config
+              key: app_url
+        - name: BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: go-app-config
+              key: base_url
